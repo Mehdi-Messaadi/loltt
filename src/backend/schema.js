@@ -9,6 +9,12 @@ import {
 } from "graphql";
 import axios from "axios";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const API_KEY = process.env.API_KEY;
+
 // Define the BanType GraphQL object
 const BanType = new GraphQLObjectType({
   name: "Ban",
@@ -243,7 +249,7 @@ const AccountType = new GraphQLObjectType({
               `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${parent.puuid}/ids`,
               {
                 headers: {
-                  "X-Riot-Token": "RGAPI-d369995b-ef1a-49df-9783-fb370c5d83f0",
+                  "X-Riot-Token": API_KEY,
                 },
               }
             );
@@ -282,7 +288,7 @@ const RootQuery = new GraphQLObjectType({
             `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${args.gameName}/${args.tagLine}`,
             {
               headers: {
-                "X-Riot-Token": "RGAPI-d369995b-ef1a-49df-9783-fb370c5d83f0",
+                "X-Riot-Token": API_KEY,
               },
             }
           );
