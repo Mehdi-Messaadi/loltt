@@ -316,7 +316,7 @@ const RootQuery = new GraphQLObjectType({
             `https://${args.region}.api.riotgames.com/lol/match/v5/matches/${args.matchId}`,
             {
               headers: {
-                "X-Riot-Token": "RGAPI-d369995b-ef1a-49df-9783-fb370c5d83f0",
+                "X-Riot-Token": API_KEY,
               },
             }
           );
