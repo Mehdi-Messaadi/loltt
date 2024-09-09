@@ -1,50 +1,93 @@
-# React + TypeScript + Vite
+# LoLTT (League of Legends Tracker Tool)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LoLTT is a web application that allows users to search and view detailed match information for a player in League of Legends. By entering the player's Game Name, Tag Line, and selecting the region, users can quickly access a list of their most recent matches and drill down into specific match details.
 
-Currently, two official plugins are available:
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [Usage](#usage)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## Expanding the ESLint configuration
+To get a local copy of this project up and running, follow these instructions.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+Before starting, ensure you have the following installed:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- [Docker](https://docs.docker.com/get-docker/)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- A [Riot Games Developer Account](https://developer.riotgames.com/)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Installation
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. Clone the repository to your local machine:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+    ```bash
+    git clone https://github.com/Mehdi-Messaadi/loltt.git
+    ```
+
+2. Change into the project directory:
+
+    ```bash
+    cd .\loltt\
+    ```
+
+## Configuration
+
+1. **Obtain your Riot Games API key**:
+
+   - Visit the [Riot Developer Portal](https://developer.riotgames.com/).
+   - Connect with your Riot account.
+   - Navigate to the "Support" page (if you're not redirected automatically).
+   - At the bottom of the page, complete the Captcha and regenerate your **API KEY**.
+
+2. **Configure the project**:
+
+   - In the project directory, navigate to `src/backend/.env`.
+   - Open the `.env` file and paste your **API KEY** between the quotes like so:
+
+    ```bash
+    RIOT_API_KEY="YOUR_API_KEY"
+    ```
+
+   - Next, open the `Dockerfile` located in the root folder, and replace the placeholder with your API KEY value as required.
+
+## Running the Application
+
+1. Build the Docker image:
+
+    ```bash
+    docker build -t my-app .
+    ```
+
+2. Run the Docker container:
+
+    ```bash
+    docker run -p 3000:3000 -p 4000:4000 my-app
+    ```
+
+3. The application should now be running locally. Open your browser and navigate to:
+
+    ```
+    http://localhost:3000/
+    ```
+
+## Usage
+
+1. Enter the **Game Name** and **Tag Line** of the player whose latest matches you want to retrieve.
+2. Select the appropriate region from the dropdown.
+3. Click on the **Search Matches** button.
+4. Wait for a few seconds for the matches to load.
+5. Click on any match to view detailed statistics, including team and participant information.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+## Acknowledgments
+
+- [Riot Games API](https://developer.riotgames.com/) for providing access to game data.
