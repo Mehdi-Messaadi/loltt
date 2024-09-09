@@ -51,7 +51,7 @@ Before starting, ensure you have the following installed:
    - Open the `.env` file and paste your **API KEY** between the quotes like so:
 
     ```bash
-    RIOT_API_KEY="YOUR_API_KEY"
+    API_KEY="YOUR_API_KEY"
     ```
 
    - Next, open the `Dockerfile` located in the root folder, and replace the placeholder with your API KEY value as required.
