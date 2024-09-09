@@ -5,12 +5,12 @@
   "type": "module",
    "scripts": {
     "dev": "npx concurrently \"npm run dev:backend\" \"vite\"",
-    "dev:backend": "tsc -b && node backend/index.js",
+    "dev:backend": "tsc -b && node src/backend/index.js",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "npx concurrently \"npm run start:backend\" \"vite preview\"",
-    "start:backend": "node backend/index.js"
+    "start:backend": "node src/backend/index.js"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
