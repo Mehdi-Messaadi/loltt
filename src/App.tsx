@@ -1,7 +1,72 @@
-import React, { useState } from "react";
-import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { useState } from "react";
+import { gql, useLazyQuery } from "@apollo/client";
 
-// GraphQL query to fetch matches based on region
+// TypeScript types
+interface Match {
+  id: string;
+}
+
+interface AccountMatchesData {
+  account: {
+    gameName: string;
+    tagLine: string;
+    matches: Match[];
+  };
+}
+
+interface MatchDetailsData {
+  match: {
+    id: string;
+    metadata: {
+      matchId: string;
+      participants: string[];
+    };
+    info: {
+      gameCreation: number;
+      gameDuration: number;
+      gameEndTimestamp: number;
+      gameMode: string;
+      gameName: string;
+      gameStartTimestamp: number;
+      gameVersion: string;
+      mapId: number;
+      teams: {
+        teamId: number;
+        win: boolean;
+        bans: {
+          championId: number;
+          pickTurn: number;
+        }[];
+        objectives: {
+          baron: {
+            kills: number;
+          };
+          dragon: {
+            kills: number;
+          };
+          tower: {
+            kills: number;
+          };
+        };
+      }[];
+      participants: {
+        summonerName: string;
+        teamId: number;
+        championName: string;
+        kills: number;
+        deaths: number;
+        assists: number;
+        champLevel: number;
+        goldEarned: number;
+        totalMinionsKilled: number;
+        largestMultiKill: number;
+        visionScore: number;
+      }[];
+    };
+  };
+}
+
+// GraphQL queries
 const GET_ACCOUNT_MATCHES = gql`
   query GetAccountMatches($gameName: String!, $tagLine: String!) {
     account(gameName: $gameName, tagLine: $tagLine) {
@@ -14,7 +79,6 @@ const GET_ACCOUNT_MATCHES = gql`
   }
 `;
 
-// GraphQL query to fetch match details
 const GET_MATCH_DETAILS = gql`
   query GetMatchDetails($matchId: String!, $region: String!) {
     match(matchId: $matchId, region: $region) {
@@ -35,49 +99,28 @@ const GET_MATCH_DETAILS = gql`
         teams {
           teamId
           win
-          bans {
-            championId
-            pickTurn
-          }
           objectives {
             baron {
-              first
-              kills
-            }
-            champion {
-              first
               kills
             }
             dragon {
-              first
-              kills
-            }
-            inhibitor {
-              first
-              kills
-            }
-            riftHerald {
-              first
               kills
             }
             tower {
-              first
               kills
             }
           }
         }
         participants {
           summonerName
-          teamId
           championName
           kills
           deaths
           assists
-          champLevel
           goldEarned
+          visionScore
           totalMinionsKilled
           largestMultiKill
-          visionScore
         }
       }
     }
@@ -89,30 +132,33 @@ function App() {
   const [tagLine, setTagLine] = useState(""); // Player's tagline
   const [region, setRegion] = useState(""); // Selected region
   const [selectedMatch, setSelectedMatch] = useState(""); // Selected match ID
-  const [matches, setMatches] = useState([]); // List of matches
+  const [matches, setMatches] = useState<Match[]>([]); // List of matches
 
-  const { data: accountData, refetch } = useQuery(GET_ACCOUNT_MATCHES, {
-    skip: true,
-  });
+  const [getAccountMatches] =
+    useLazyQuery<AccountMatchesData>(GET_ACCOUNT_MATCHES);
 
   const [getMatchDetails, { data: matchDetailsData }] =
-    useLazyQuery(GET_MATCH_DETAILS);
+    useLazyQuery<MatchDetailsData>(GET_MATCH_DETAILS);
 
-  const handleRegionChange = (e) => {
+  const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRegion(e.target.value);
   };
 
   const handleSearch = async () => {
     if (gameName && tagLine && region) {
-      const { data } = await refetch({
-        gameName,
-        tagLine,
+      const { data } = await getAccountMatches({
+        variables: {
+          gameName,
+          tagLine,
+        },
       });
-      setMatches(data.account.matches);
+      if (data) {
+        setMatches(data.account.matches);
+      }
     }
   };
 
-  const handleMatchSelect = (matchId) => {
+  const handleMatchSelect = (matchId: string) => {
     setSelectedMatch(matchId);
     getMatchDetails({
       variables: {
