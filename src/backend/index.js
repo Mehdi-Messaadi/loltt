@@ -1,6 +1,6 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import schema from "./schema.js"; // Import your GraphQL schema from schema.js
+import schema from "./schema.js";
 
 const startApolloServer = async () => {
   const app = express();
@@ -20,5 +20,4 @@ const startApolloServer = async () => {
   });
 };
 
-// Call the function to start the server
 startApolloServer();
